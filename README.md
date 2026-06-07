@@ -7,7 +7,7 @@ A full-stack employee management platform with three layers:
 - **Mobile** — Flutter (Dart) with Riverpod + Dio
 
 ---
-
+https://github.com/user-attachments/assets/6852b023-ae62-487b-9d83-cfa0e9595f79
 ## Features
 
 ### Web Dashboard (Admin / HR)
