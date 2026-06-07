@@ -11,6 +11,7 @@ A full-stack employee management platform with three layers:
 ## Features
 
 ### Web Dashboard (Admin / HR)
+
 - Live dashboard with stat cards — total employees, departments, present today, pending leaves, approved/rejected leaves, unread notifications
 - Employees by department bar chart and leave type breakdown
 - Quick-add employee directly from the dashboard (opens modal, saves to Employees page)
@@ -18,34 +19,40 @@ A full-stack employee management platform with three layers:
 - Today's attendance panel and recent leave requests panel
 
 ### Employee Management
+
 - Full CRUD — create, view, edit, deactivate, reactivate, permanently delete
 - Fields: name, email, job title, department, hire date, base salary, role
 - Filter and search employees
 - Role assignment during creation (employee / hr_manager / dept_manager)
 
 ### Department Management
+
 - Create, rename, delete departments
 - View employee headcount per department
 
 ### Attendance
+
 - Employee clock in / clock out from mobile app
 - Admin view of all attendance records
 - Per-employee attendance history with date filtering
 - Total hours auto-calculated on checkout
 
 ### Leave Management
+
 - Employees submit leave requests (annual, sick, unpaid, other) with date range and reason
 - HR / manager approves or rejects requests
 - Status tracking: pending → approved / rejected
 - Leave history per employee
 
 ### Payroll
+
 - Admin runs payroll for a date range — auto-calculates gross, deductions, net for all active employees
 - Per-employee payslip generation
 - Payslip history view on web and mobile
 - CSV export per payroll run
 
 ### Performance Management
+
 - Admin creates named review cycles with start and end dates
 - Managers submit performance reviews (1–5 star rating + comments) per employee per cycle
 - Cycle summary view with average ratings
@@ -54,18 +61,21 @@ A full-stack employee management platform with three layers:
 - Employees can view their own reviews and update goal progress
 
 ### Notifications
+
 - In-app notification system with unread badge on bell icon
 - Notifications triggered by leave approvals, payroll runs, review submissions
 - Admin can send manual notifications to specific employees or broadcast to all
 - Mark as read / mark all read
 
 ### Audit Logs
+
 - Full audit trail of all write operations (create, update, delete, activate, deactivate)
 - Stores actor user ID, action, entity type, entity ID, timestamp
 - Admin-only access via web dashboard
 - Can be cleared via `python clear_audit_logs.py`
 
 ### Authentication & Security
+
 - JWT access + refresh token pair
 - Bcrypt password hashing
 - Refresh token revocation on logout
@@ -84,6 +94,7 @@ The AI layer combines a **rule-based ML engine** (pure Python, no external ML li
 
 **Attrition Risk Scoring**
 Scores every active employee 0–100 for attrition risk:
+
 - Absence rate last 30 days — weight 40
 - Leave request volume last 90 days — weight 30
 - Latest performance rating (lower = higher risk) — weight 30
@@ -92,6 +103,7 @@ Risk levels: `Low` (0–34) · `Medium` (35–59) · `High` (60–100)
 
 **Department Ranking**
 Ranks all departments by a composite score:
+
 - Average performance rating across employees (60%)
 - Attendance rate last 30 days (40%)
 
@@ -105,6 +117,7 @@ Ask any workforce question in plain English — e.g. "Who are the top 5 highest-
 
 **Productivity Score**
 Personal daily score (0–100):
+
 - Checked in today → +40 pts
 - Worked ≥ 8 hours → +20 pts
 - Has a goal in progress or completed → +20 pts
@@ -122,6 +135,7 @@ Last 6 months of personal data per month — present days, average hours, approv
 Employees ask questions about their own data — e.g. "How has my attendance been this quarter?" or "Am I at risk of burnout?"
 
 ### Gemini Model Fallback
+
 The backend automatically tries multiple Gemini models in order until one succeeds:
 `gemini-2.5-flash-preview-05-20` → `gemini-2.0-flash` → `gemini-2.0-flash-lite` → `gemini-1.5-flash-latest` → `gemini-pro`
 
@@ -202,6 +216,7 @@ eems/
 ```
 
 ### Request lifecycle
+
 ```
 Request → CORS middleware → Router → Dependency injection
   → get_db() opens AsyncSession
@@ -211,6 +226,7 @@ Request → CORS middleware → Router → Dependency injection
 ```
 
 ### JWT flow
+
 1. POST `email + password` → `/api/v1/auth/login`
 2. Backend verifies bcrypt hash → returns `access_token` + `refresh_token`
 3. Tokens stored (web → localStorage, mobile → flutter_secure_storage)
@@ -222,13 +238,13 @@ Request → CORS middleware → Router → Dependency injection
 
 ## Prerequisites
 
-| Tool | Version |
-|------|---------|
-| Python | 3.11+ |
-| PostgreSQL | 14+ |
-| Node.js | 18+ |
-| Flutter | 3.22+ |
-| Dart SDK | 3.3+ |
+| Tool       | Version |
+| ---------- | ------- |
+| Python     | 3.11+   |
+| PostgreSQL | 14+     |
+| Node.js    | 18+     |
+| Flutter    | 3.22+   |
+| Dart SDK   | 3.3+    |
 
 ---
 
@@ -331,21 +347,21 @@ flutter run
 
 ## API Endpoints
 
-| Endpoint | Description |
-|----------|-------------|
-| `POST /api/v1/auth/login` | Login, returns JWT pair |
-| `POST /api/v1/auth/refresh` | Refresh access token |
-| `POST /api/v1/auth/logout` | Revoke refresh token |
-| `GET  /api/v1/auth/me` | Current user profile |
-| `/api/v1/employees` | CRUD for employees |
-| `/api/v1/departments` | CRUD for departments |
-| `/api/v1/attendance` | Check-in/out, history |
-| `/api/v1/leave` | Leave requests + approvals |
-| `/api/v1/payroll` | Run payroll, payslips |
-| `/api/v1/performance` | Review cycles, goals, ratings |
-| `/api/v1/notifications` | In-app notifications |
-| `/api/v1/ai` | ML scores + Gemini Q&A |
-| `/api/v1/audit-logs` | Admin audit trail |
+| Endpoint                    | Description                   |
+| --------------------------- | ----------------------------- |
+| `POST /api/v1/auth/login`   | Login, returns JWT pair       |
+| `POST /api/v1/auth/refresh` | Refresh access token          |
+| `POST /api/v1/auth/logout`  | Revoke refresh token          |
+| `GET  /api/v1/auth/me`      | Current user profile          |
+| `/api/v1/employees`         | CRUD for employees            |
+| `/api/v1/departments`       | CRUD for departments          |
+| `/api/v1/attendance`        | Check-in/out, history         |
+| `/api/v1/leave`             | Leave requests + approvals    |
+| `/api/v1/payroll`           | Run payroll, payslips         |
+| `/api/v1/performance`       | Review cycles, goals, ratings |
+| `/api/v1/notifications`     | In-app notifications          |
+| `/api/v1/ai`                | ML scores + Gemini Q&A        |
+| `/api/v1/audit-logs`        | Admin audit trail             |
 
 Full interactive docs at `http://localhost:8000/docs`.
 
@@ -353,12 +369,12 @@ Full interactive docs at `http://localhost:8000/docs`.
 
 ## Roles
 
-| Role | Access |
-|------|--------|
-| `admin` | Full access — all features, all employees |
-| `hr_manager` | Employees, payroll, leave approvals |
-| `dept_manager` | Their department's employees and reviews |
-| `employee` | Own profile, attendance, payslips, goals |
+| Role           | Access                                    |
+| -------------- | ----------------------------------------- |
+| `admin`        | Full access — all features, all employees |
+| `hr_manager`   | Employees, payroll, leave approvals       |
+| `dept_manager` | Their department's employees and reviews  |
+| `employee`     | Own profile, attendance, payslips, goals  |
 
 ---
 
@@ -379,14 +395,14 @@ alembic downgrade -1
 
 ## Utility Scripts
 
-| Script | Purpose |
-|--------|---------|
-| `seed_admin.py` | Creates the initial admin user |
-| `seed_employee.py` | Seeds sample employee data |
-| `reset_password.py` | Resets a user's password by email |
-| `update_admin.py` | Updates admin user details |
-| `clear_data.py` | Wipes all employee data, keeps admin |
-| `clear_audit_logs.py` | Clears only the audit_logs table |
+| Script                | Purpose                              |
+| --------------------- | ------------------------------------ |
+| `seed_admin.py`       | Creates the initial admin user       |
+| `seed_employee.py`    | Seeds sample employee data           |
+| `reset_password.py`   | Resets a user's password by email    |
+| `update_admin.py`     | Updates admin user details           |
+| `clear_data.py`       | Wipes all employee data, keeps admin |
+| `clear_audit_logs.py` | Clears only the audit_logs table     |
 
 ### Start fresh (wipe all employee data)
 
@@ -426,3 +442,8 @@ public
 ```
 
 Right-click any table → View/Edit Data → All Rows to inspect records.
+
+## Team Members
+
+- Yash Sukhadiya
+- Gauri More
